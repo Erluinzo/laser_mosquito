@@ -32,6 +32,8 @@ My strong recommendation - don't use the power laser! I recommend making a devic
 #### Improved tracker
 An updated, modular implementation of the tracking pipeline lives in [8.Improved_tracker](8.Improved_tracker/): motion detection for insects, Kalman prediction for moving targets, automatic pixel→DAC calibration by homography, optional closed-loop aiming, software safety interlocks, and a simulation mode that runs on any PC without the hardware. See its README for usage.
 
+**Building this from scratch?** [BUILD_GUIDE.md](BUILD_GUIDE.md) is a complete walkthrough — full shopping list, wiring tables, every command from blank SD card to a running tracker.
+
 #### How It Works
 To detect x,y coordinates initially we used Haar cascades in RaspberryPI after that yolov4-tiny in Jetson nano.
 For Y coordinates - stereo vision.    

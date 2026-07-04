@@ -41,8 +41,9 @@ python3 track.py --sim --source your_recording.mp4 --save-video out.mp4
 On the Jetson rig:
 
 ```bash
-# 1. one-time aim calibration: plain surface in view, laser pointer on
-python3 calibrate.py
+# 1. one-time aim calibration: plain surface in view (--laser holds the
+#    laser GPIO on during the sweep; omit it if your laser has its own switch)
+python3 calibrate.py --laser
 
 # 2. bench test with the yellow LED, laser stays off
 python3 track.py --mode color --display

@@ -53,11 +53,25 @@ def main():
     ap.add_argument("--source", default=None,
                     help="jetson | webcam index | video file (default: config.py)")
     ap.add_argument("--out", default=config.CALIBRATION_FILE)
+    ap.add_argument("--laser", action="store_true",
+                    help="hold the laser GPIO on during the sweep "
+                         "(<= 1 mW pointer only!)")
     args = ap.parse_args()
 
     source = args.source if args.source is not None else config.CAMERA_SOURCE
     if isinstance(source, str) and source.isdigit():
         source = int(source)
+
+    gpio = None
+    if args.laser:
+        try:
+            import Jetson.GPIO as GPIO
+            gpio = GPIO
+            gpio.setmode(gpio.BOARD)
+            gpio.setup(config.LASER_GPIO_PIN, gpio.OUT, initial=gpio.HIGH)
+            print("laser GPIO on for the duration of the sweep")
+        except ImportError:
+            print("Jetson.GPIO not available - switch the laser on manually")
 
     dac = Mcp4922()
     grabber = camera.FrameGrabber(source)
@@ -66,6 +80,9 @@ def main():
     finally:
         grabber.release()
         dac.close()
+        if gpio is not None:
+            gpio.output(config.LASER_GPIO_PIN, gpio.LOW)
+            gpio.cleanup()
 
     if len(pixels) < 8:
         sys.exit("only %d grid points detected - check DOT_HSV_* in config.py, "
