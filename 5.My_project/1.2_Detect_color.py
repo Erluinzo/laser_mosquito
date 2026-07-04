@@ -15,6 +15,7 @@ second = '1011' # lower
 print ("ok2")
 
 def dac (channel, voltage):
+ voltage = max(0, min(4095, int(voltage))) # MCP4922 is a 12-bit DAC, values outside 0-4095 would corrupt the SPI frame
  voltage1=bin((voltage))
  voltage2=voltage1[2:]
  s = channel + (voltage2).zfill(12) 
@@ -28,10 +29,14 @@ camera = cv2.VideoCapture('nvarguscamerasrc ! video/x-raw(memory:NVMM), width=40
 
 print ("ok5")
 axi_z=1330
-while 1:  
+while 1:
  (grabbed, frame) = camera.read()
+ if not grabbed:
+  break
  cv2.imshow("Frame", frame)
  key = cv2.waitKey(1) & 0xFF
+ if key == ord("q"):
+  break
 
  frame = cv2.erode(frame, None, iterations=4)
  frame = cv2.dilate(frame, None, iterations=4)
@@ -42,8 +47,10 @@ while 1:
 # dac (second, axi_z)
 # dac (first, 2600)
  (grabbed, frame) = camera.read()
+ if not grabbed:
+  break
  cv2.imshow("Frame", frame)
- 
+
  frame = cv2.inRange(frame, colorLower, colorUpper)
  cnts = cv2.findContours(frame.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
  radius = 0
@@ -52,7 +59,7 @@ while 1:
 
 
  for c in cnts:
-  ((x, y), radius) = cv2.minEnclosingCircle(cnts[0])
+  ((x, y), radius) = cv2.minEnclosingCircle(c)
    
  # my = 10.2665*x+246#.8017
  # mx = 6.7691*y-68#.7463 
@@ -78,5 +85,5 @@ while 1:
   if key == ord("q"):
    break
 
-cap.release()
+camera.release()
 cv2.destroyAllWindows()

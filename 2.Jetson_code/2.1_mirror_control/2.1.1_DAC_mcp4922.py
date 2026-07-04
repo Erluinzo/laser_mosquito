@@ -11,6 +11,7 @@ Voltage_B=3
 
 def dac (channel, voltage):
 #voltage = 900 #
+ voltage = max(0, min(4095, int(voltage))) # MCP4922 is a 12-bit DAC, values outside 0-4095 would corrupt the SPI frame
  voltage1=bin((voltage))
  voltage2=voltage1[2:]
 

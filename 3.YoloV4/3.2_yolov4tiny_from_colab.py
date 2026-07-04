@@ -3,6 +3,8 @@ import numpy as np
 import tensorflow as tf
 #%tensorflow_version 1.x
 from keras.backend.tensorflow_backend import set_session
+from keras.callbacks import (EarlyStopping, ModelCheckpoint,
+                             ReduceLROnPlateau, TensorBoard)
 from keras.layers import Input, Lambda
 from keras.models import Model
 from keras.optimizers import Adam

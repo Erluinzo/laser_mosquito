@@ -56,7 +56,9 @@ _decode = Decode(conf_thresh, nms_thresh, model_image_size, yolo4_model, class_n
 cap = cv2.VideoCapture(0)
 
 while 1:
- ret, image = cap.read()   
+ ret, image = cap.read()
+ if not ret:
+  break
  #image = cv2.imread(img)
  #image = cv2.imread('C:/Users/test.jpg')
 

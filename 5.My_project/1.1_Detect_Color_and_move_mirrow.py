@@ -15,6 +15,7 @@ second = '1011' # lower
 print ("ok2")
 
 def dac (channel, voltage):
+ voltage = max(0, min(4095, int(voltage))) # MCP4922 is a 12-bit DAC, values outside 0-4095 would corrupt the SPI frame
  voltage1=bin((voltage))
  voltage2=voltage1[2:]
  s = channel + (voltage2).zfill(12) 
@@ -35,10 +36,14 @@ radius = 8
 
 print ("ok5")
 axi_z=[640]
-while 1:
- for axi in axi_z:  
+running = True
+while running:
+ for axi in axi_z:
   time.sleep(0.5)
   (grabbed, frame) = camera.read()
+  if not grabbed:
+   running = False
+   break
   #frame = cv2.cvtColor(cv2.UMat(frame), cv2.COLOR_RGB2GRAY)
  #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
   frames=frame
@@ -63,9 +68,10 @@ while 1:
     cv2.imshow("Frames", frames)
     key = cv2.waitKey(1) & 0xFF
     if key == ord("q"):
+     running = False
      break
+  if not running:
+   break
 
-
-
-cap.release()
+camera.release()
 cv2.destroyAllWindows()
