@@ -29,6 +29,9 @@ The main limiting factor in the development of this technology is the danger of 
 We can develop additional security systems, such as human detection, audio sensors, etc. But in any case, we are not able to make the installation 100% safe, since even a laser can be reflected and damage the eye of a person who is not in the field of view of the device and at a distant distance. Therefore, this technology should not be used at home. 
 My strong recommendation - don't use the power laser! I recommend making a device that will track an object using a safe laser pointer.
 
+#### Improved tracker
+An updated, modular implementation of the tracking pipeline lives in [8.Improved_tracker](8.Improved_tracker/): motion detection for insects, Kalman prediction for moving targets, automatic pixel→DAC calibration by homography, optional closed-loop aiming, software safety interlocks, and a simulation mode that runs on any PC without the hardware. See its README for usage.
+
 #### How It Works
 To detect x,y coordinates initially we used Haar cascades in RaspberryPI after that yolov4-tiny in Jetson nano.
 For Y coordinates - stereo vision.    
